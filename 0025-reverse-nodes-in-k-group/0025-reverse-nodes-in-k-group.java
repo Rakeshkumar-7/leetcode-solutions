@@ -42,16 +42,12 @@ class Solution {
             last = last.next;
             i++;
         }
-        ListNode next = last.next;
         last.next = reverse(last.next, k, n - k);
         node = reverseList(head, k);
         return node;
     }
     public ListNode reverseKGroup(ListNode head, int k) {
         int n = getLength(head);
-        if(n < k){
-            return head;
-        }
         head = reverse(head, k, n);
         return head;
     }
