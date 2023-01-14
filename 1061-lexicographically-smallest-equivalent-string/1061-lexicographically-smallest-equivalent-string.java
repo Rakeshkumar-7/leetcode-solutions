@@ -1,22 +1,21 @@
 class UnionFind{
-    Map<Character, Character> parent;
-    // Map<Character, Integer> size;
+    int[] parent;
     public UnionFind(){
-        parent = new HashMap<Character, Character>();
-        // size = new HashMap<Character, Integer>();
+        parent = new int[26];
+        Arrays.fill(parent, -1);
     }
-    public Character getParent(Character i){
-        if(!parent.containsKey(i)){
-            parent.put(i, i);
+    public int getParent(int i){
+        if(parent[i] == -1){
+            parent[i] = i;
             return i;
         }
-        if(parent.get(i) == i){
+        if(parent[i] == i){
             return i;
         }
-        parent.put(i, getParent(parent.get(i)));
-        return parent.get(i);
+        parent[i] = getParent(parent[i]);
+        return parent[i];
     }
-    public Boolean union(Character i, Character j){
+    public Boolean union(int i, int j){
         i = this.getParent(i);
         j = this.getParent(j);
         if(i == j){
@@ -25,9 +24,9 @@ class UnionFind{
 
         // Using the characters themselves instead of size[] to perform union operation
         if(i < j){
-            parent.put(j, i);
+            parent[j] = i;
         }else{
-            parent.put(i, j);
+            parent[i] = j;
         }
         return true;
     }
@@ -37,12 +36,12 @@ class Solution {
     public String smallestEquivalentString(String s1, String s2, String baseStr) {
         UnionFind uf = new UnionFind();
         for(int i=0; i<s1.length(); i++){
-            uf.union(s1.charAt(i), s2.charAt(i));
+            uf.union(s1.charAt(i)-'a', s2.charAt(i)-'a');
         }
 
         StringBuilder sb = new StringBuilder();
         for(int i=0; i<baseStr.length(); i++){
-            Character minLex = uf.getParent(baseStr.charAt(i));
+            char minLex = (char)(uf.getParent(baseStr.charAt(i)-'a') + (int)'a');
             sb.append(minLex);
         }
 
