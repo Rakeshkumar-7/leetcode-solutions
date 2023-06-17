@@ -16,24 +16,21 @@ class Solution {
 
         
         // Binary search the required val, since its sorted
-        while(k < arr2.length && arr2[k] <= prev){
-            k++;
+        int left = k;
+        int right = arr2.length;
+        int mid;
+        while(left < right){
+            mid = (left + right)/2;
+            if(arr2[mid] <= prev){
+                left = mid + 1;
+            }else{
+                right = mid;
+            }
         }
-        // int left = 0;
-        // int right = arr2.length;
-        // int mid;
-        // while(left < right){
-        //     mid = (left + right)/2;
-        //     if(arr2[mid] <= prev){
-        //         left = mid + 1;
-        //     }else{
-        //         right = mid;
-        //     }
-        // }
         
         // Assume that you've done arr1[cur] = arr2[left]. Pass it as prev. Include this step's cost
-        if(k < arr2.length){
-            cost = Math.min(cost, 1 + util(arr1, arr2, dp, cur + 1, arr2[k], k));
+        if(left < arr2.length){
+            cost = Math.min(cost, 1 + util(arr1, arr2, dp, cur + 1, arr2[left], left));
         }
 
         dp.put(new Pair<>(cur, prev), cost);
