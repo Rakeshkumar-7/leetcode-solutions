@@ -18,7 +18,6 @@ class Solution {
 
         // Search the row
         int row = high;
-        System.out.println(row);
         low = 0;
         high = n-1;
         while(low < high){
@@ -33,7 +32,7 @@ class Solution {
         }
 
         if(matrix[row][high] == target) return true;
-        
+
         return false;
     }
 }
