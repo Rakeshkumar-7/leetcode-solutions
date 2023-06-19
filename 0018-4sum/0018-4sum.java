@@ -1,45 +1,49 @@
 class Solution {
-    private List<List<Integer>> twoSum(int[] nums, long target, int start){
-        // int[] nums will be sorted
-        int left = start;
-        int right = nums.length - 1;
-        List<List<Integer>> res = new ArrayList<>();
-        while(right > left){
-            int cur = nums[left] + nums[right];
-            if(cur > target || (right + 1 < nums.length && nums[right+1] == nums[right])){
-                right--;
-            }else if(cur < target || (left-1 >= start && nums[left] == nums[left-1])){
-                left++;
-            }else{
-                List<Integer> next = new ArrayList<>();
-                next.add(nums[left++]);
-                next.add(nums[right--]);
-                res.add(next);
+    private int[] getOrder(int n, int[][] pr){
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            adj.add(new ArrayList<Integer>());
+        }
+        for(int[] course: pr){
+            adj.get(course[1]).add(course[0]);
+        }
+        int indegree[] = new int[n];
+        for(ArrayList<Integer> neighbors: adj){
+            for(Integer neighbor: neighbors){
+                indegree[neighbor]++;
             }
         }
-        return res;
-    }
-    private List<List<Integer>> kSum(int[] nums, long target, int start, int k){
-        if(k == 2){
-            return twoSum(nums, target, start);
-        }
-        List<List<Integer>> res = new ArrayList<>();
-        if(start == nums.length){
-            return res;
-        }
-        for(int i=start; i<nums.length; i++){
-            if(i == start || nums[i-1] != nums[i]){
-                for(List<Integer> subset: kSum(nums, target - nums[i], i+1, k-1)){
-                    List<Integer> next = new ArrayList<>(Arrays.asList(nums[i]));
-                    next.addAll(subset);
-                    res.add(next);
-                }
+
+        Queue<Integer> q = new PriorityQueue<>();
+        for(int i=0; i<n; i++){
+            if(indegree[i] == 0){
+                q.add(i);
             }
         }
-        return res;
+
+        ArrayList<Integer> order = new ArrayList<>();
+        int m = 0;
+        while(q.size() > 0){
+            int node = q.poll();
+            m++;
+            for(int neighbor: adj.get(node)){
+                indegree[neighbor]--;
+                if(indegree[neighbor] == 0) q.add(neighbor);
+            }
+            order.add(node);
+        }
+        if(m != n){
+            order.clear();
+        }
+        int[] result = new int[order.size()];
+        int i = 0;
+        for(int x: order){
+            result[i] = x;
+            i++;
+        }
+        return result;
     }
-    public List<List<Integer>> fourSum(int[] nums, int target) {
-        Arrays.sort(nums);
-        return kSum(nums, target, 0, 4);
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        return getOrder(numCourses, prerequisites);
     }
 }
