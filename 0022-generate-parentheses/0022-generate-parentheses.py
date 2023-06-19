@@ -7,6 +7,7 @@ class Solution:
             self.generate(res, cur + "(", n-1, _open+1)
         if(_open > 0):
             self.generate(res, cur + ")", n, _open-1)
+        return
 
     def generateParenthesis(self, n: int) -> List[str]:
         res: List[str] = []
