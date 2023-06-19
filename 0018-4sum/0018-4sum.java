@@ -14,7 +14,7 @@ class Solution {
             }
         }
 
-        Queue<Integer> q = new PriorityQueue<>();
+        Queue<Integer> q = new LinkedList<>();
         for(int i=0; i<n; i++){
             if(indegree[i] == 0){
                 q.add(i);
