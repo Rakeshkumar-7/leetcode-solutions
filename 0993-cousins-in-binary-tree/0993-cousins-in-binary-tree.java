@@ -14,37 +14,31 @@
  * }
  */
 class Solution {
-    public boolean isCousins(TreeNode root, int x, int y) {
-        Queue<Pair<TreeNode, Integer>> bfs = new LinkedList<>();
-        bfs.add(new Pair<>(root, -1));
-        
-        while(bfs.size() > 0){
-            int foundX = -1;
-            int foundY = -1;
-            List<Pair<TreeNode, Integer>> next = new LinkedList<>();
-            while(bfs.size() > 0){
-                Pair<TreeNode, Integer> cur = bfs.poll();
-                if(cur.getKey() == null) continue;
-                if(cur.getKey().val == x){
-                    foundX = cur.getValue();
-                }else if(cur.getKey().val == y){
-                    foundY = cur.getValue();
-                }
-                next.add(new Pair<>(cur.getKey().left, cur.getKey().val));
-                next.add(new Pair<>(cur.getKey().right, cur.getKey().val));
-            }
-            if(foundX != -1 && foundY != -1){
-                if(foundX == foundY){
-                    return false;
-                }else{
-                    return true;
-                }
-            }
-            for(Pair<TreeNode, Integer> i: next){
-                bfs.add(i);
-            }
+    private Pair<Integer, Integer> dfs(TreeNode node, int x, int d){
+        if(node == null){
+            return new Pair<>(-1, -1);
         }
-        return false;
-    }
+        if(node.val == x){
+            return new Pair<>(d, -1);
+        }
+        if(node.left != null && node.left.val == x){
+            return new Pair<>(d+1, node.val);
+        }
+        if(node.right != null && node.right.val == x){
+            return new Pair<>(d+1, node.val);
+        }
+        Pair<Integer, Integer> left = dfs(node.left, x, d+1);
+        Pair<Integer, Integer> right = dfs(node.right, x, d+1);
+        if(left.getKey() == -1){
+            return right;
+        }
 
+        return left;
+    }
+    public boolean isCousins(TreeNode root, int x, int y) {
+        Pair<Integer, Integer> X = this.dfs(root, x, 0);
+        Pair<Integer, Integer> Y = this.dfs(root, y, 0);
+        
+        return (X.getKey() == Y.getKey()) && (X.getValue() != Y.getValue());
+    }
 }
