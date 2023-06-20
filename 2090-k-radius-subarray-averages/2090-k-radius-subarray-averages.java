@@ -1,7 +1,6 @@
 class Solution {
     public int[] getAverages(int[] nums, int k) {
         int n = nums.length;
-        System.out.println(n);
         int sub = 2*k + 1;
 
         int[] res = new int[n];
