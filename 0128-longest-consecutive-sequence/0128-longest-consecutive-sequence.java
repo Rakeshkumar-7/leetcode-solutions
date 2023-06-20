@@ -10,9 +10,10 @@ class Solution {
         int max = 1;
         int prev = heap.poll();
         int length = 1;
-        
+        System.out.println(prev);
         while(heap.size() > 0){
             int cur = heap.poll();
+            System.out.println(cur);
             if(Math.abs(cur - prev) == 1){
                 length++;
             }else if(cur == prev){
